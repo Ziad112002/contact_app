@@ -4,75 +4,161 @@ import 'package:contact/styles/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-class AddContact extends StatelessWidget {
+class AddContact extends StatefulWidget {
   const AddContact({super.key});
 
   @override
+  State<AddContact> createState() => _AddContactState();
+}
+
+class _AddContactState extends State<AddContact> {
+  final myController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey();
+  AutovalidateMode autoValidateMode = AutovalidateMode.disabled;
+  String? name, email, phoneNumber;
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 7),
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 11),
-                  decoration: BoxDecoration(
-                    border: BoxBorder.all(width: 1, color: AppColors.gold),
-                    borderRadius: BorderRadius.circular(28),
+    return Form(
+      key: formKey,
+      autovalidateMode: autoValidateMode,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+        child: Column(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 7),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 11,
+                      ),
+                      decoration: BoxDecoration(
+                        border: BoxBorder.all(width: 1, color: AppColors.gold),
+                        borderRadius: BorderRadius.circular(28),
+                      ),
+                      child: Image.asset(
+                        AppAssets.moPhoto,
+                        fit: BoxFit.cover,
+                      ), //Lottie.asset(AppAssets.imagePickerAnimation),
+                    ),
                   ),
-                  child: Lottie.asset(AppAssets.imagePickerAnimation),
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("User Name", style: AppTextStyle.gold16Medium),
-                    Divider(height: 16, color: AppColors.gold),
-                    Text("example@email.com", style: AppTextStyle.gold16Medium),
-                    Divider(height: 16, color: AppColors.gold),
-                    Text("+200000000000", style: AppTextStyle.gold16Medium),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 16),
-          buildInfoTextField("Enter User Name "),
-          SizedBox(height: 9),
-          buildInfoTextField("Enter User Email "),
-          SizedBox(height: 9),
-          buildInfoTextField("Enter User Phone"),
-          SizedBox(height: 16),
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: WidgetStatePropertyAll(AppColors.gold),
-              padding: WidgetStatePropertyAll(
-                EdgeInsets.symmetric(horizontal: 137, vertical: 17),
-              ),
-              shape: WidgetStatePropertyAll(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadiusGeometry.circular(15),
-                ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          (name == null || name!.isEmpty) ? "User Name" : name!,
+                          style: AppTextStyle.gold16Medium,
+                        ),
+                        Divider(height: 16, color: AppColors.gold),
+                        Text(
+                          email ?? "example@email.com",
+                          style: AppTextStyle.gold16Medium,
+                        ),
+                        Divider(height: 16, color: AppColors.gold),
+                        Text(
+                          phoneNumber ?? "+200000000000",
+                          style: AppTextStyle.gold16Medium,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-            onPressed: () {},
-            child: Text("Enter User", style: AppTextStyle.darkBlue20Regular),
-          ),
-        ],
+            SizedBox(height: 16),
+            Expanded(
+              child: ItemsTextFormFields(hintText: "Enter User Name ", onSaved: (value) {
+                  name = value;
+                }, onChanged: (value) {
+                  name = value;
+                }),
+            ),
+            SizedBox(height: 9),
+            Expanded(
+              child: ItemsTextFormFields(hintText: "Enter User Email ", onSaved: (value) {
+                  name = value;
+                }, onChanged: (value) {
+                  email = value;
+                }),
+            ),
+            SizedBox(height: 9),
+            Expanded(
+              child: ItemsTextFormFields(hintText: "Enter User Phone", onSaved: (value) {
+                  name = value;
+                }, onChanged: (value) {
+                  phoneNumber = value;
+                }),
+            ),
+            SizedBox(height: 16),
+            Expanded(child: buildElevatedButton()),
+          ],
+        ),
       ),
     );
   }
 
-  Widget buildInfoTextField(String hintText) {
+  ElevatedButton buildElevatedButton() {
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: WidgetStatePropertyAll(AppColors.gold),
+        padding: WidgetStatePropertyAll(
+          EdgeInsets.symmetric(horizontal: 137, vertical: 17),
+        ),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.circular(15),
+          ),
+        ),
+      ),
+      onPressed: () {
+        setState(() {
+          if (formKey.currentState!.validate()) {
+            formKey.currentState!.save();
+          } else {
+            autoValidateMode = AutovalidateMode.always;
+          }
+        });
+      },
+      child: Text("Enter User", style: AppTextStyle.darkBlue20Regular),
+    );
+  }
+}
+
+class ItemsTextFormFields extends StatelessWidget {
+  const ItemsTextFormFields({
+    super.key,
+    required this.hintText,
+    required this.onSaved,
+    required this.onChanged,
+  });
+
+  final String hintText;
+  final void Function(String?)? onSaved;
+  final void Function(String)? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
     var border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
       borderSide: BorderSide(width: 1.5, color: AppColors.gold),
     );
-    return TextField(
+    return TextFormField(
+      onSaved: onSaved,
+      validator: (value) {
+        if (value?.isEmpty ?? true) {
+          return "Field is Required";
+        } else {
+          return null;
+        }
+      },
+      onChanged: onChanged,
+      style: AppTextStyle.gold20Medium,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: AppTextStyle.lightBlue16Regular,

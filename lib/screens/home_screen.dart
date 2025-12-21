@@ -18,10 +18,9 @@ class HomeScreen extends StatelessWidget {
           FloatingActionButton(
             backgroundColor: AppColors.orange,
             child: Icon(Icons.delete, color: AppColors.white),
-            onPressed: () {
-            },
+            onPressed: () {},
           ),
-          SizedBox(height: 8,),
+          SizedBox(height: 8),
           FloatingActionButton(
             backgroundColor: AppColors.gold,
             child: Icon(Icons.add, color: AppColors.darkBlue),
@@ -45,17 +44,14 @@ class HomeScreen extends StatelessWidget {
       ),
       body: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-
-            crossAxisCount: 2,
-            mainAxisSpacing: 12,
-            childAspectRatio: 0.68,
-
-
+          crossAxisCount: 2,
+          mainAxisSpacing: 12,
+          childAspectRatio: 0.68,
         ),
         itemCount: 6,
-        itemBuilder: (_,index) {
+        itemBuilder: (_, index) {
           return ContactInfo();
-        }
+        },
       ),
     );
   }
