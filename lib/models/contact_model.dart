@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 part 'contact.g.dart';
 
 @HiveType(typeId: 0)
-class Contact extends HiveObject {
+class ContactModel extends HiveObject {
 
   @HiveField(0)
   String name;
@@ -17,7 +17,7 @@ class Contact extends HiveObject {
   @HiveField(3)
   String imagePath;
 
-  Contact({
+  ContactModel({
     required this.name,
     required this.email,
     required this.phone,

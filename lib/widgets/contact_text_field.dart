@@ -7,13 +7,13 @@ class ContactTextField extends StatelessWidget {
   const ContactTextField({
     super.key,
     required this.hintText,
-    required this.onSaved,
     required this.onChanged,
+    required this.controller
   });
 
   final String hintText;
-  final void Function(String?)? onSaved;
   final void Function(String)? onChanged;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class ContactTextField extends StatelessWidget {
       borderSide: BorderSide(width: 1.5, color: AppColors.gold),
     );
     return TextFormField(
-      onSaved: onSaved,
+
       validator: (value) {
         if (value?.isEmpty ?? true) {
           return "Field is Required";
@@ -30,6 +30,7 @@ class ContactTextField extends StatelessWidget {
           return null;
         }
       },
+      controller: controller,
       onChanged: onChanged,
       style: AppTextStyle.gold20Medium,
       decoration: InputDecoration(

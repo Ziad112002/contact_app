@@ -1,10 +1,15 @@
-import 'package:contact/styles/app_assets.dart';
+import 'dart:io';
+
+import 'package:contact/models/contact_model.dart';
 import 'package:contact/styles/app_colors.dart';
 import 'package:contact/styles/app_text_style.dart';
 import 'package:flutter/material.dart';
 
 class ContactInfo extends StatelessWidget {
-  const ContactInfo({super.key});
+  const ContactInfo({super.key,required this.contact,required this.index});
+  final ContactModel contact;
+  final int index;
+
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +26,7 @@ class ContactInfo extends StatelessWidget {
           Expanded(
             child: buildInfoRow(
               Icon(Icons.mail, color: AppColors.darkBlue),
-              "moSalah.route@gmail.com",
+             contact.email,
             ),
           ),
           SizedBox(height: 10),
@@ -29,7 +34,7 @@ class ContactInfo extends StatelessWidget {
           Expanded(
             child: buildInfoRow(
               Icon(Icons.wifi_calling_3_rounded, color: AppColors.darkBlue),
-              "+200000000000",
+              contact.phone,
             ),
           ),
           SizedBox(height: 8),
@@ -50,7 +55,7 @@ class ContactInfo extends StatelessWidget {
               topLeft: Radius.circular(16),
             ),
             image: DecorationImage(
-              image: AssetImage(AppAssets.kilyanPhoto),
+              image: FileImage(File(contact.imagePath)),
               fit: BoxFit.cover,
             ),
           ),
@@ -64,7 +69,7 @@ class ContactInfo extends StatelessWidget {
               color: AppColors.gold,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Text("Mo Salah", style: AppTextStyle.darkBlue14Medium),
+            child: Text(contact.name, style: AppTextStyle.darkBlue14Medium),
           ),
         ),
       ],
@@ -87,7 +92,9 @@ class ContactInfo extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          contact.delete();
+        },
         style: ButtonStyle(
           backgroundColor: WidgetStatePropertyAll(AppColors.orange),
           shape: WidgetStatePropertyAll(

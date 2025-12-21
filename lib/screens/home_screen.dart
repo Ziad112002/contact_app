@@ -1,13 +1,30 @@
+import 'package:contact/models/contact_model.dart';
 import 'package:contact/styles/app_colors.dart';
 import 'package:contact/widgets/add_contact.dart';
 import 'package:contact/widgets/contact_info.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:lottie/lottie.dart';
 import '../styles/app_assets.dart';
+import '../styles/app_text_style.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static const routeName = "home_screen";
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late final Box<ContactModel> box;
+
+  @override
+  void initState() {
+    super.initState();
+    box = Hive.box<ContactModel>('contacts_box');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,24 +59,41 @@ class HomeScreen extends StatelessWidget {
           height: 40,
         ),
       ),
-      body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 12,
-          childAspectRatio: 0.68,
-        ),
-        itemCount: 6,
-        itemBuilder: (_, index) {
-          return ContactInfo();
+      body: ValueListenableBuilder(
+        valueListenable: box.listenable(),
+        builder: (context, Box box, _) {
+          final contacts = box.values.cast<ContactModel>().toList();
+
+          if (box.isEmpty) {
+            return buildNoContacts();
+          }
+          return GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 12,
+              childAspectRatio: 0.68,
+            ),
+            itemCount: box.length,
+            itemBuilder: (context, index) {
+              return ContactInfo(contact: contacts[index], index: index);
+            },
+          );
         },
       ),
     );
   }
+
+  Column buildNoContacts() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(child: Lottie.asset(AppAssets.emptyListAnimation)),
+        Text(
+          "There is No Contacts Added Here",
+          style: AppTextStyle.gold20Medium,
+        ),
+      ],
+    );
+  }
 }
 
-// child:
-// Center(child: Lottie.asset(AppAssets.emptyListAnimation)),
-// Text(
-//   "There is No Contacts Added Here",
-//   style: AppTextStyle.gold20Medium,
-// ),

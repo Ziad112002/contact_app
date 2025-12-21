@@ -1,10 +1,13 @@
+import 'package:contact/models/contact_model.dart';
 import 'package:contact/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.openBox("contacts_box");
+  Hive.registerAdapter(ContactAdapter());
+  await Hive.openBox<ContactModel>("contacts_box");
   runApp(const MyApp());
 }
 
