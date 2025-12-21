@@ -54,7 +54,7 @@ class _AddContactState extends State<AddContact> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          (name == null || name!.isEmpty) ? "User Name" : name!,
+                          name ?? "User Name",
                           style: AppTextStyle.gold16Medium,
                         ),
                         Divider(height: 16, color: AppColors.gold),
@@ -75,27 +75,39 @@ class _AddContactState extends State<AddContact> {
             ),
             SizedBox(height: 16),
             Expanded(
-              child: ContactTextField(hintText: "Enter User Name ", onSaved: (value) {
+              child: ContactTextField(
+                hintText: "Enter User Name ",
+                onSaved: (value) {
                   name = value;
-                }, onChanged: (value) {
+                },
+                onChanged: (value) {
                   name = value;
-                }),
+                },
+              ),
             ),
             SizedBox(height: 9),
             Expanded(
-              child: ContactTextField(hintText: "Enter User Email ", onSaved: (value) {
-                  name = value;
-                }, onChanged: (value) {
+              child: ContactTextField(
+                hintText: "Enter User Email ",
+                onSaved: (value) {
                   email = value;
-                }),
+                },
+                onChanged: (value) {
+                  email = value;
+                },
+              ),
             ),
             SizedBox(height: 9),
             Expanded(
-              child: ContactTextField(hintText: "Enter User Phone", onSaved: (value) {
-                  name = value;
-                }, onChanged: (value) {
+              child: ContactTextField(
+                hintText: "Enter User Phone",
+                onSaved: (value) {
                   phoneNumber = value;
-                }),
+                },
+                onChanged: (value) {
+                  phoneNumber = value;
+                },
+              ),
             ),
             SizedBox(height: 16),
             Expanded(child: buildElevatedButton()),
@@ -131,4 +143,3 @@ class _AddContactState extends State<AddContact> {
     );
   }
 }
-
