@@ -9,7 +9,6 @@ class ContactInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-
       margin: EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
         color: AppColors.gold,
@@ -17,8 +16,7 @@ class ContactInfo extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Expanded(
-              flex:7,child: buildContactImage()),
+          Expanded(flex: 7, child: buildContactImage()),
           SizedBox(height: 15),
           Expanded(
             child: buildInfoRow(
@@ -36,8 +34,7 @@ class ContactInfo extends StatelessWidget {
           ),
           SizedBox(height: 8),
 
-          Expanded(flex:2,child: buildDeleteButton()),
-
+          Expanded(flex: 2, child: buildDeleteButton()),
         ],
       ),
     );
@@ -45,34 +42,33 @@ class ContactInfo extends StatelessWidget {
 
   Stack buildContactImage() {
     return Stack(
-          children: [
-            Container(
-
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(16),
-                  topLeft: Radius.circular(16),
-                ),
-                image: DecorationImage(
-                  image: AssetImage(AppAssets.kilyanPhoto),
-                  fit: BoxFit.cover,
-                ),
-              ),
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(16),
+              topLeft: Radius.circular(16),
             ),
-            Positioned(
-              bottom: 8,
-              left: 7,
-              child: Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppColors.gold,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text("Mo Salah", style: AppTextStyle.darkBlue14Medium),
-              ),
+            image: DecorationImage(
+              image: AssetImage(AppAssets.kilyanPhoto),
+              fit: BoxFit.cover,
             ),
-          ],
-        );
+          ),
+        ),
+        Positioned(
+          bottom: 8,
+          left: 7,
+          child: Container(
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: AppColors.gold,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text("Mo Salah", style: AppTextStyle.darkBlue14Medium),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget buildInfoRow(Icon icon, String info) {
@@ -89,7 +85,7 @@ class ContactInfo extends StatelessWidget {
 
   Widget buildDeleteButton() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal:  7,vertical: 7),
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
       child: ElevatedButton(
         onPressed: () {},
         style: ButtonStyle(
@@ -98,9 +94,6 @@ class ContactInfo extends StatelessWidget {
             RoundedRectangleBorder(
               borderRadius: BorderRadiusGeometry.circular(8),
             ),
-          ),
-          padding: WidgetStatePropertyAll(
-            EdgeInsets.symmetric(horizontal: 56, vertical: 9.5),
           ),
         ),
         child: Row(

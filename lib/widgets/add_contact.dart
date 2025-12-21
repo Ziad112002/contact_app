@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:contact/styles/app_assets.dart';
 import 'package:contact/styles/app_colors.dart';
 import 'package:contact/styles/app_text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 
 import 'contact_text_field.dart';
@@ -18,6 +21,8 @@ class _AddContactState extends State<AddContact> {
   final GlobalKey<FormState> formKey = GlobalKey();
   AutovalidateMode autoValidateMode = AutovalidateMode.disabled;
   String? name, email, phoneNumber;
+  final ImagePicker picker = ImagePicker();
+  File? selectedImage;
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -32,20 +37,38 @@ class _AddContactState extends State<AddContact> {
               child: Row(
                 children: [
                   Expanded(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 7),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 11,
+                    child: InkWell(
+                      onTap: () async {
+                        final image = await pickImage();
+                        if (image != null) {
+                          setState(() {
+                            selectedImage = image;
+                          });
+                        }
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 7),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 11,
+                        ),
+                        decoration: BoxDecoration(
+                          border: BoxBorder.all(
+                            width: 1,
+                            color: AppColors.gold,
+                          ),
+                          borderRadius: BorderRadius.circular(28),
+                          image: selectedImage != null
+                              ? DecorationImage(
+                                  image: FileImage(selectedImage!),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
+                        ),
+                        child: selectedImage == null
+                            ? Lottie.asset(AppAssets.imagePickerAnimation)
+                            : null,
                       ),
-                      decoration: BoxDecoration(
-                        border: BoxBorder.all(width: 1, color: AppColors.gold),
-                        borderRadius: BorderRadius.circular(28),
-                      ),
-                      child: Image.asset(
-                        AppAssets.moPhoto,
-                        fit: BoxFit.cover,
-                      ), //Lottie.asset(AppAssets.imagePickerAnimation),
                     ),
                   ),
                   Expanded(
@@ -141,5 +164,11 @@ class _AddContactState extends State<AddContact> {
       },
       child: Text("Enter User", style: AppTextStyle.darkBlue20Regular),
     );
+  }
+
+  Future<File?> pickImage() async {
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image == null) return null;
+    return File(image.path);
   }
 }
