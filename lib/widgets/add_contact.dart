@@ -4,6 +4,8 @@ import 'package:contact/styles/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+import 'contact_text_field.dart';
+
 class AddContact extends StatefulWidget {
   const AddContact({super.key});
 
@@ -73,7 +75,7 @@ class _AddContactState extends State<AddContact> {
             ),
             SizedBox(height: 16),
             Expanded(
-              child: ItemsTextFormFields(hintText: "Enter User Name ", onSaved: (value) {
+              child: ContactTextField(hintText: "Enter User Name ", onSaved: (value) {
                   name = value;
                 }, onChanged: (value) {
                   name = value;
@@ -81,7 +83,7 @@ class _AddContactState extends State<AddContact> {
             ),
             SizedBox(height: 9),
             Expanded(
-              child: ItemsTextFormFields(hintText: "Enter User Email ", onSaved: (value) {
+              child: ContactTextField(hintText: "Enter User Email ", onSaved: (value) {
                   name = value;
                 }, onChanged: (value) {
                   email = value;
@@ -89,7 +91,7 @@ class _AddContactState extends State<AddContact> {
             ),
             SizedBox(height: 9),
             Expanded(
-              child: ItemsTextFormFields(hintText: "Enter User Phone", onSaved: (value) {
+              child: ContactTextField(hintText: "Enter User Phone", onSaved: (value) {
                   name = value;
                 }, onChanged: (value) {
                   phoneNumber = value;
@@ -130,44 +132,3 @@ class _AddContactState extends State<AddContact> {
   }
 }
 
-class ItemsTextFormFields extends StatelessWidget {
-  const ItemsTextFormFields({
-    super.key,
-    required this.hintText,
-    required this.onSaved,
-    required this.onChanged,
-  });
-
-  final String hintText;
-  final void Function(String?)? onSaved;
-  final void Function(String)? onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    var border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(15),
-      borderSide: BorderSide(width: 1.5, color: AppColors.gold),
-    );
-    return TextFormField(
-      onSaved: onSaved,
-      validator: (value) {
-        if (value?.isEmpty ?? true) {
-          return "Field is Required";
-        } else {
-          return null;
-        }
-      },
-      onChanged: onChanged,
-      style: AppTextStyle.gold20Medium,
-      decoration: InputDecoration(
-        hintText: hintText,
-        hintStyle: AppTextStyle.lightBlue16Regular,
-        border: border,
-        enabledBorder: border,
-        disabledBorder: border,
-        errorBorder: border,
-        focusedBorder: border,
-      ),
-    );
-  }
-}
