@@ -32,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: ValueListenableBuilder(
         valueListenable: box.listenable(),
     builder: (context, Box<ContactModel> box, _) {
-
      return Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -45,13 +44,12 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           if (box.isNotEmpty && box.length < 6)
           const SizedBox(height: 8),
-
-
           if (box.length < 6) FloatingActionButton(
             backgroundColor: AppColors.gold,
             child: const Icon(Icons.add, color: AppColors.darkBlue),
             onPressed: () {
               showModalBottomSheet(
+                isScrollControlled: true,
                 context: context,
                 backgroundColor: AppColors.darkBlue,
 
@@ -63,7 +61,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       );
     },
-
       ),
       appBar: AppBar(
         backgroundColor: AppColors.darkBlue,

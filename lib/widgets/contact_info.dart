@@ -1,10 +1,8 @@
 import 'dart:io';
-
 import 'package:contact/models/contact_model.dart';
 import 'package:contact/styles/app_colors.dart';
 import 'package:contact/styles/app_text_style.dart';
 import 'package:flutter/material.dart';
-
 class ContactInfo extends StatelessWidget {
   const ContactInfo({super.key,required this.contact,required this.index});
   final ContactModel contact;
@@ -30,7 +28,6 @@ class ContactInfo extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10),
-
           Expanded(
             child: buildInfoRow(
               Icon(Icons.wifi_calling_3_rounded, color: AppColors.darkBlue),
@@ -38,13 +35,11 @@ class ContactInfo extends StatelessWidget {
             ),
           ),
           SizedBox(height: 8),
-
           Expanded(flex: 2, child: buildDeleteButton()),
         ],
       ),
     );
   }
-
   Stack buildContactImage() {
     return Stack(
       children: [
@@ -82,7 +77,7 @@ class ContactInfo extends StatelessWidget {
       child: Row(
         children: [
           icon,
-          Text(info, style: AppTextStyle.darkBlue10Medium),
+          Flexible(child: Text(info,maxLines: 1,overflow: TextOverflow.ellipsis, style: AppTextStyle.darkBlue10Medium)),
         ],
       ),
     );

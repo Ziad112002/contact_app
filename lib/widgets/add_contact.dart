@@ -46,71 +46,72 @@ class _AddContactState extends State<AddContact> {
   }
 
   String? name, email, phoneNumber;
-  final ImagePicker picker = ImagePicker();
-  File? selectedImage;
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: formKey,
-      autovalidateMode: autoValidateMode,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-        child: Column(
-          children: [
-            Expanded(flex: 2, child: buildContactImage()),
-            SizedBox(height: 16),
-            Expanded(
-              child: ContactTextField(
-                controller: nameCtrl,
-                hintText: "Enter User Name ",
-                onChanged: (value) {
-                  name = value;
-                },
-              ),
+    return AnimatedPadding(
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeOut,
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom, // ⭐ keyboard height
+      ),
+      child: SingleChildScrollView(
+        child: Form(
+          key: formKey,
+          autovalidateMode: autoValidateMode,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                buildShowContactItem(),
+                SizedBox(height: 16),
+                ContactTextField(
+                  controller: nameCtrl,
+                  hintText: "Enter User Name ",
+                  onChanged: (value) {
+                    name = value;
+                  },
+                ),
+                SizedBox(height: 8),
+                ContactTextField(
+                  controller: emailCtrl,
+                  hintText: "Enter User Email ",
+                  onChanged: (value) {
+                    email = value;
+                  },
+                ),
+                SizedBox(height: 8),
+                ContactTextField(
+                  controller: phoneCtrl,
+                  hintText: "Enter User Phone",
+      
+                  onChanged: (value) {
+                    phoneNumber = value;
+                  },
+                ),
+                SizedBox(height: 16),
+                buildElevatedButton(),
+              ],
             ),
-            SizedBox(height: 9),
-            Expanded(
-              child: ContactTextField(
-                controller: emailCtrl,
-                hintText: "Enter User Email ",
-                onChanged: (value) {
-                  email = value;
-                },
-              ),
-            ),
-            SizedBox(height: 9),
-            Expanded(
-              child: ContactTextField(
-                controller: phoneCtrl,
-                hintText: "Enter User Phone",
-
-                onChanged: (value) {
-                  phoneNumber = value;
-                },
-              ),
-            ),
-            SizedBox(height: 16),
-            Expanded(child: buildElevatedButton()),
-          ],
+          ),
         ),
       ),
     );
   }
 
-  Row buildContactImage() {
+  Row buildShowContactItem() {
     return Row(
       children: [
         Expanded(
           child: InkWell(
-            onTap: () async {
-              final image = await pickImage();
-              if (image != null) {
+            splashColor: Colors.transparent,
+            onTap: ()  {
                 setState(() {
-                  selectedImage = image;
+                  pickImage();
                 });
-              }
             },
             child: Container(
+              height: MediaQuery.of(context).size.height*.17,
               margin: EdgeInsets.symmetric(horizontal: 7),
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 11),
               decoration: BoxDecoration(
@@ -152,30 +153,33 @@ class _AddContactState extends State<AddContact> {
     );
   }
 
-  ElevatedButton buildElevatedButton() {
-    return ElevatedButton(
-      style: ButtonStyle(
-        backgroundColor: WidgetStatePropertyAll(AppColors.gold),
-        padding: WidgetStatePropertyAll(
-          EdgeInsets.symmetric(horizontal: 137, vertical: 17),
-        ),
-        shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadiusGeometry.circular(15),
+  SizedBox buildElevatedButton() {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: WidgetStatePropertyAll(AppColors.gold),
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadiusGeometry.circular(15),
+            ),
+          ),
+          padding: WidgetStatePropertyAll(
+            EdgeInsets.symmetric(vertical: 14)
           ),
         ),
+        onPressed: () {
+          setState(() {
+            saveContact();
+            if (formKey.currentState!.validate()) {
+              formKey.currentState!.save();
+            } else {
+              autoValidateMode = AutovalidateMode.always;
+            }
+          });
+        },
+        child: Text("Enter User",textAlign: TextAlign.center, style: AppTextStyle.darkBlue20Regular),
       ),
-      onPressed: () {
-        setState(() {
-          saveContact();
-          if (formKey.currentState!.validate()) {
-            formKey.currentState!.save();
-          } else {
-            autoValidateMode = AutovalidateMode.always;
-          }
-        });
-      },
-      child: Text("Enter User", style: AppTextStyle.darkBlue20Regular),
     );
   }
 
