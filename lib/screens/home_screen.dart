@@ -29,27 +29,41 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.darkBlue,
-      floatingActionButton: Column(
+      floatingActionButton: ValueListenableBuilder(
+        valueListenable: box.listenable(),
+    builder: (context, Box<ContactModel> box, _) {
+
+     return Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton(
+          if (box.isNotEmpty) FloatingActionButton(
             backgroundColor: AppColors.orange,
-            child: Icon(Icons.delete, color: AppColors.white),
-            onPressed: () {},
-          ),
-          SizedBox(height: 8),
-          FloatingActionButton(
-            backgroundColor: AppColors.gold,
-            child: Icon(Icons.add, color: AppColors.darkBlue),
+            child: const Icon(Icons.delete, color: AppColors.white),
             onPressed: () {
-              showModalBottomSheet(
-                backgroundColor: AppColors.darkBlue,
-                context: context,
-                builder: (context) => AddContact(),
-              );
+              box.deleteAt(box.length - 1);
             },
           ),
+          if (box.isNotEmpty && box.length < 6)
+          const SizedBox(height: 8),
+
+
+          if (box.length < 6) FloatingActionButton(
+            backgroundColor: AppColors.gold,
+            child: const Icon(Icons.add, color: AppColors.darkBlue),
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                backgroundColor: AppColors.darkBlue,
+
+                builder: (_) => const AddContact(),
+              );
+            },
+          )
+          ,
         ],
+      );
+    },
+
       ),
       appBar: AppBar(
         backgroundColor: AppColors.darkBlue,
@@ -85,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Column buildNoContacts() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Center(child: Lottie.asset(AppAssets.emptyListAnimation)),
         Text(
