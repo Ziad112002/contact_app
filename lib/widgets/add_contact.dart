@@ -44,15 +44,14 @@ class _AddContactState extends State<AddContact> {
 
     Navigator.pop(context);
   }
-
   String? name, email, phoneNumber;
   @override
   Widget build(BuildContext context) {
     return AnimatedPadding(
-      duration: const Duration(milliseconds: 250),
+      duration:  Duration(milliseconds: 250),
       curve: Curves.easeOut,
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom, // ⭐ keyboard height
+        bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: SingleChildScrollView(
         child: Form(
@@ -71,6 +70,7 @@ class _AddContactState extends State<AddContact> {
                   onChanged: (value) {
                     name = value;
                   },
+                  validator: validateNameAndPhone,
                 ),
                 SizedBox(height: 8),
                 ContactTextField(
@@ -79,15 +79,17 @@ class _AddContactState extends State<AddContact> {
                   onChanged: (value) {
                     email = value;
                   },
+                  validator: validateEmail,
                 ),
                 SizedBox(height: 8),
                 ContactTextField(
                   controller: phoneCtrl,
                   hintText: "Enter User Phone",
-      
+                  validator: validateNameAndPhone,
                   onChanged: (value) {
                     phoneNumber = value;
                   },
+                  textInput: TextInputType.phone,
                 ),
                 SizedBox(height: 16),
                 buildElevatedButton(),
@@ -98,13 +100,12 @@ class _AddContactState extends State<AddContact> {
       ),
     );
   }
-
   Row buildShowContactItem() {
     return Row(
       children: [
         Expanded(
           child: InkWell(
-            splashColor: Colors.transparent,
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
             onTap: ()  {
                 setState(() {
                   pickImage();
@@ -145,6 +146,7 @@ class _AddContactState extends State<AddContact> {
               Text(
                 phoneNumber ?? "+200000000000",
                 style: AppTextStyle.gold16Medium,
+
               ),
             ],
           ),
@@ -152,7 +154,6 @@ class _AddContactState extends State<AddContact> {
       ],
     );
   }
-
   SizedBox buildElevatedButton() {
     return SizedBox(
       width: double.infinity,
@@ -182,6 +183,21 @@ class _AddContactState extends State<AddContact> {
       ),
     );
   }
+  String? validateNameAndPhone(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Field is required";
+    }
+    return null;
+  }
+String? validateEmail(String? value){
+    final emailRegEx=RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    if (value == null || value.isEmpty) {
+      return 'Please enter your email';
+    } else if (!emailRegEx.hasMatch(value)) {
+      return 'Please enter a valid email';
+    }
+    return null;
 
+}
 
 }

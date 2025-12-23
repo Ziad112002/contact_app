@@ -8,12 +8,16 @@ class ContactTextField extends StatelessWidget {
     super.key,
     required this.hintText,
     required this.onChanged,
-    required this.controller
+    required this.controller,
+    required this.validator,
+    this.textInput=TextInputType.text
   });
 
   final String hintText;
   final void Function(String)? onChanged;
   final TextEditingController controller;
+  final String? Function(String?)? validator;
+  final TextInputType textInput;
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +27,11 @@ class ContactTextField extends StatelessWidget {
     );
     return TextFormField(
 
-      validator: (value) {
-        if (value?.isEmpty ?? true) {
-          return "Field is Required";
-        } else {
-          return null;
-        }
-      },
+      validator: validator,
       controller: controller,
       onChanged: onChanged,
       style: AppTextStyle.gold20Medium,
+      keyboardType: textInput,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: AppTextStyle.lightBlue16Regular,

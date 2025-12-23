@@ -52,7 +52,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 isScrollControlled: true,
                 context: context,
                 backgroundColor: AppColors.darkBlue,
-
                 builder: (_) => const AddContact(),
               );
             },
